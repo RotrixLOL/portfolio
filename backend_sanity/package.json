@@ -16,6 +16,7 @@
   "dependencies": {
     "@babel/preset-env": "^7.19.3",
     "@sanity/base": "^2.34.0",
+    "@sanity/cli": "2.34.2",
     "@sanity/core": "^2.34",
     "@sanity/default-layout": "^2.34.0",
     "@sanity/default-login": "^2.34.0",
