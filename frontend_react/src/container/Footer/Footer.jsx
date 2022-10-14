@@ -1,5 +1,5 @@
 /* eslint-disable object-shorthand */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { images } from '../../constants';
 import { AppWrap, MotionWrap } from '../../wrapper';
@@ -13,6 +13,8 @@ const Footer = () => {
   const [loading, setLoading] = useState(false);
 
   const { name, email, message } = formData;
+
+  const [authorInfo, setAuthorInfo] = useState([]);
 
   const handleChangeInput = (e) => {
     // eslint-disable-next-line no-shadow
@@ -38,6 +40,17 @@ const Footer = () => {
       });
   };
 
+  useEffect(() => {
+    const query = '*[_type == "authorInfo"]';
+
+    client.fetch(query).then((data) => {
+      setAuthorInfo(data);
+    });
+  }, []);
+
+  const authorEmail = authorInfo[0]?.email;
+  const authorMobile = authorInfo[0]?.number;
+
   return (
     <>
       <h2 className="head-text">Take a coffe & chat with me</h2>
@@ -45,11 +58,11 @@ const Footer = () => {
       <div className="app__footer-cards">
         <div className="app__footer-card">
           <img src={images.email} alt="email" />
-          <a href="mailto:contact@rotrixx.eu" className="p-text">contact@rotrixx.eu</a>
+          <a href={`mailto:${authorEmail}`} className="p-text">{authorEmail}</a>
         </div>
         <div className="app__footer-card">
           <img src={images.mobile} alt="mobile" />
-          <a href="tel: +34 (643) 339-281" className="p-text">+34 (643) 339-281</a>
+          <a href={`tel: ${authorMobile}`} className="p-text">{authorMobile}</a>
         </div>
       </div>
 

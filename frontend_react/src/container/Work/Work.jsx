@@ -9,16 +9,22 @@ import './Work.scss';
 const Work = () => {
   const [works, setWorks] = useState([]);
   const [filterWork, setFilterWork] = useState([]);
+  const [tags, setTags] = useState([]);
   const [activeFilter, setActiveFilter] = useState('All');
   const [animateCard, setAnimateCard] = useState({ y: 0, opacity: 1 });
 
   useEffect(() => {
     const query = '*[_type == "works"]';
+    const tagsQuery = '*[_type == "tags"]';
 
-    client.fetch(query).then((data) => {
-      setWorks(data);
-      setFilterWork(data);
-    });
+    client.fetch(query)
+      .then((data) => {
+        setWorks(data);
+        setFilterWork(data);
+      });
+
+    client.fetch(tagsQuery)
+      .then((data) => setTags(data));
   }, []);
 
   const handleWorkFilter = (item) => {
@@ -41,9 +47,20 @@ const Work = () => {
       <h2 className="head-text">My Creative <span>Portfolio</span> Section</h2>
 
       <div className="app__work-filter">
-        {['React', 'Tailwind', 'Web App', 'Mobile App', 'All'].map((item, index) => (
+        {/* Custom Tags */}
+        {tags?.map((item, index) => (
           <div
             key={index}
+            onClick={() => handleWorkFilter(item.name)}
+            className={`app__work-filter-item app__flex p-text ${activeFilter === item.name ? 'item-active' : ''}`}
+          >
+            {item.name}
+          </div>
+        ))}
+        {/* Default Tags */}
+        {['Web App', 'Mobile App', 'Web 3', 'All'].map((item) => (
+          <div
+            key={item}
             onClick={() => handleWorkFilter(item)}
             className={`app__work-filter-item app__flex p-text ${activeFilter === item ? 'item-active' : ''}`}
           >
